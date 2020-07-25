@@ -21,7 +21,7 @@ namespace EmbyExternalPlayerLauncher.Players
 {
     public interface IPlayerAdapter
     {
-        bool Play(string filePath, long embyStartTicks = 0);
+        bool Play(string server, string filePath, string fileId, long embyStartTicks = 0);
         bool Pause();
         bool Unpause();
         bool PlayPause();        

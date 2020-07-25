@@ -139,12 +139,12 @@ namespace EmbyExternalPlayerLauncher.Players.MpcHc
             });
         }
 
-        public bool Play(string filePath, long embyStartTicks = 0)
+        public bool Play(string server, string filePath, string fileId, long embyStartTicks = 0)
         {
             log.DebugFormat("MPC-HC Play: {0}", filePath);
             try
             {
-                var args = GetPlayerArgs(filePath, embyStartTicks);
+                var args = GetPlayerArgs(server, filePath, fileId, embyStartTicks);
                 mpcHcProc = Process.Start(mpcHcPath, args);
                 lastPosition = 0;
             }
@@ -255,12 +255,13 @@ namespace EmbyExternalPlayerLauncher.Players.MpcHc
             }
         }
 
-        private string GetPlayerArgs(string filePath, long embyStartTicks)
+        private string GetPlayerArgs(string server, string filePath, string fileId, long embyStartTicks)
         {
             long startPosMs = embyStartTicks / Utils.EmbyTicksPerMs;
-            return mpcHcArgs.Replace("{s}", startPosMs.ToString())
-                + " /webport " + mpcHcWebPort.ToString()
-                + " \"" + filePath + "\"";
+            if(server.EndsWith("/"))
+                return mpcHcArgs.Replace("{s}", $"{server}emby/videos/{fileId}/stream.mp4?Static=true");
+            else
+                return mpcHcArgs.Replace("{s}", $"{server}/emby/videos/{fileId}/stream.mp4?Static=true");
         }
 
         private bool MpcHcPostCommand(IDictionary<string, string> data)

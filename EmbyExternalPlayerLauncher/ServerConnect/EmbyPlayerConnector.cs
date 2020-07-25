@@ -277,7 +277,7 @@ namespace EmbyExternalPlayerLauncher.ServerConnect
                 playingItem = await client.GetItemAsync(playingId, playReq.ControllingUserId);
               
                 log.InfoFormat("Playing \"{0}\" from \"{1}\"", playingItem.Name, playingItem.Path);
-                if (player.Play(playingItem.Path, playingItem.UserData.PlaybackPositionTicks))
+                if (player.Play(client.ServerAddress, playingItem.Path, playingId, playingItem.UserData.PlaybackPositionTicks))
                 {
                     log.Debug("Playback started.");
                     client.ReportPlaybackStartAsync(new PlaybackStartInfo
